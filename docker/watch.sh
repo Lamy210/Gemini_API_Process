@@ -1,4 +1,3 @@
-``bash
 #!/bin/bash
 
 INPUT_DIR="/app/input"
@@ -12,9 +11,7 @@ log() {
 
 # 初期化
 mkdir -p "$PROCESSED_DIR"
-chmod 755 "$PROCESSED_DIR"
 touch "$LOG_FILE"
-chmod 644 "$LOG_FILE"
 
 log "Watcher started"
 
@@ -31,32 +28,12 @@ while true; do
         if [ "$initial_size" = "$current_size" ]; then
             log "File size stable, proceeding with processing"
             
-            # ファイルのパーミッションを確認
-            if [ ! -r "$INPUT_DIR/input.csv" ]; then
-                log "Error: Cannot read input.csv"
-                continue
-            fi
-            
-            # ファイルが空でないことを確認
-            if [ ! -s "$INPUT_DIR/input.csv" ]; then
-                log "Error: input.csv is empty"
-                continue
-            fi
-            
             # プロセッサーの実行状態を確認
-            if pgrep -f "python /app/src/gemini_processor.py" > /dev/null; then
-                log "Processor is already running"
-            else
+            if ! pgrep -f "python /app/src/gemini_processor.py" > /dev/null; then
                 log "Starting processor"
+                python /app/src/gemini_processor.py &
             fi
-        else
-            log "File size changed, waiting for upload to complete"
-        fi
-    else
-        if [ $((RANDOM % 60)) -eq 0 ]; then
-            log "Waiting for input.csv"
         fi
     fi
-    
     sleep 10
 done

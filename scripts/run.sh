@@ -1,11 +1,18 @@
 #!/bin/bash
+set -e
 
-# コンテナをバックグラウンドで起動
+# 必要なディレクトリの作成と権限設定
+directories=("input/processed" "output" "logs")
+for dir in "${directories[@]}"; do
+    mkdir -p "$dir"
+    chmod 755 "$dir"
+done
+
+# スクリプトに実行権限を付与
+chmod +x docker/*.sh scripts/*.sh
+
+# Dockerコンテナの起動
 docker-compose up -d
 
-# ログの確認
-echo "Checking logs... Press Ctrl+C to stop watching logs"
-docker-compose logs -f
-
-# プロセスの状態確認
-docker-compose ps
+echo "Application started in background mode"
+echo "Use 'scripts/check_logs.sh' to monitor logs"
