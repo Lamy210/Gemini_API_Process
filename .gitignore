@@ -1,0 +1,16 @@
+# .gitignore
+.env
+__pycache__/
+*.pyc
+.DS_Store
+input/*
+!input/.gitkeep
+!input/processed/
+input/processed/*
+!input/processed/.gitkeep
+output/*
+!output/.gitkeep
+logs/*
+!logs/.gitkeep
+.idea/
+.vscode/
