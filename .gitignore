@@ -14,3 +14,4 @@ logs/*
 !logs/.gitkeep
 .idea/
 .vscode/
+*.csv
